@@ -6,7 +6,7 @@
 /*   By: ivalimak <ivalimak@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 22:14:02 by ivalimak          #+#    #+#             */
-/*   Updated: 2023/11/05 14:27:05 by ivalimak         ###   ########.fr       */
+/*   Updated: 2023/11/05 16:19:59 by ivalimak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,17 @@ void	cleartab(char **tab, size_t size)
 		i++;
 	}
 	free(tab);
+}
+
+void	*nmalloc(size_t size)
+{
+	static size_t	allocs = 0;
+	void			*out;
+
+	if (allocs % 4 == 0 && allocs > 0)
+		out = NULL;
+	else
+		out = calloc(size, 1);
+	allocs++;
+	return (out);
 }

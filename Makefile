@@ -6,46 +6,43 @@
 #    By: ivalimak <ivalimak@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/04 17:16:17 by ivalimak          #+#    #+#              #
-#    Updated: 2023/11/05 03:54:03 by ivalimak         ###   ########.fr        #
+#    Updated: 2023/11/05 16:28:54 by ivalimak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CURDIR	=	$(shell pwd)
 
+CC		=	cc
+CFLAGS	=	-Wall -Wextra -Werror -g
+
 ATOI	=	../atoitest
 SPLIT	=	../splittest
-
-ifeq ($(shell uname),Darwin)
-	MALLOC	=	malloc.dylib
-else
-	MALLOC	=	malloc.so
-endif
 
 all: atoi split
 
 $(ATOI):
-	@make -C .. --no-print-directory
+	@make -C .. 1> /dev/null
 	@echo Compiling...
 	@c++ -Wall -Wextra -Werror -I.. atoi.cpp -L.. -lft -o $(ATOI)
 
 $(SPLIT): $(MALLOC)
-	@make -C .. --no-print-directory
+	@mv ../libft.h ../libft.h.bak
+	@cp libft.h ../libft.h
+	@touch ../ft_split.c
+	@make -C .. 1> /dev/null
 	@echo Compiling...
-	@cc -Wall -Wextra -Werror -g -I.. split.c -L.. -lft -o $(SPLIT)
-
-$(MALLOC): nmalloc.c
-	@cc -Wall -Wextra -Werror -fPIC -shared -o $@ nmalloc.c
+	@$(CC) $(CFLAGS) -I.. split.c -L.. -lft -o $(SPLIT)
+	@mv ../libft.h.bak ../libft.h
 
 atoi: $(ATOI)
 	@./$(ATOI)
 	@make fclean --no-print-directory
 
 split: $(SPLIT)
-	@LD_PRELOAD=$(CURDIR)/$(MALLOC) ./$(SPLIT)
+	@./$(SPLIT)
 	@make fclean --no-print-directory
 
 clean:
-	@rm -f $(MALLOC)
 
 fclean: clean
 	@rm -f $(ATOI)
