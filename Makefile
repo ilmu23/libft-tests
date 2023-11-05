@@ -6,16 +6,20 @@
 #    By: ivalimak <ivalimak@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/04 17:16:17 by ivalimak          #+#    #+#              #
-#    Updated: 2023/11/04 23:15:05 by ivalimak         ###   ########.fr        #
+#    Updated: 2023/11/05 03:54:03 by ivalimak         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CURDIR	=	$(shell (pwd))
+CURDIR	=	$(shell pwd)
 
 ATOI	=	../atoitest
 SPLIT	=	../splittest
 
-MALLOC	=	malloc.so
+ifeq ($(shell uname),Darwin)
+	MALLOC	=	malloc.dylib
+else
+	MALLOC	=	malloc.so
+endif
 
 all: atoi split
 
